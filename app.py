@@ -85,15 +85,7 @@ df = get_data()
 if st.button("Refresh Data"):
     df = get_data()
 
-
-if "show_table" not in st.session_state:
-    st.session_state.show_table = False
-
-if st.button("Toggle Table"):
-    st.session_state.show_table = not st.session_state.show_table  # flip True/False
-
-
-if st.session_state.show_table:
+with st.expander("Submissions"):
     
     employees = sorted(df["Employee"].dropna().unique())
     selected_employee = st.multiselect("Filter by employee:", employees)
@@ -158,6 +150,7 @@ with st.form("my_form"):
      submitted = st.form_submit_button("Submit")
      if submitted:
         st.write("slider", slider_val, "checkbox", checkbox_val)
+
 
 
 

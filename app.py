@@ -66,13 +66,14 @@ import pyodbc
 #     st.sidebar.write(f"Welcome, {name} 👋")
 
 def get_data():
-    conn = pyodbc.connect(
-        r"DRIVER={ODBC Driver 17 for SQL Server};"
-        r"SERVER=localhost\SQLEXPRESS;"
-        r"DATABASE=OPUS;"
-        r"Trusted_Connection=yes;"
-        )
-    df = pd.read_sql("Select submission_date Date, job Job, employee Employee, form_name Form, link PDF from submissions", conn)
+    # conn = pyodbc.connect(
+    #     r"DRIVER={ODBC Driver 17 for SQL Server};"
+    #     r"SERVER=localhost\SQLEXPRESS;"
+    #     r"DATABASE=OPUS;"
+    #     r"Trusted_Connection=yes;"
+    #     )
+    # df = pd.read_sql("Select submission_date Date, job Job, employee Employee, form_name Form, link PDF from submissions", conn)
+    df = pd.read_csv("submissions.csv")
     
     df = df[df["Job"] == "4200 NW 19th Street"]
     # df = df.drop("Job", axis = 1)
@@ -80,63 +81,63 @@ def get_data():
     df["Form"] = [x.replace("_", " ") for x in df["Form"]]
     return df
 
-# df = get_data()
+df = get_data()
 
-# if st.button("Refresh Data"):
-#     df = get_data()
-
-
-# if "show_table" not in st.session_state:
-#     st.session_state.show_table = False
-
-# if st.button("Toggle Table"):
-#     st.session_state.show_table = not st.session_state.show_table  # flip True/False
+if st.button("Refresh Data"):
+    df = get_data()
 
 
-# if st.session_state.show_table:
+if "show_table" not in st.session_state:
+    st.session_state.show_table = False
+
+if st.button("Toggle Table"):
+    st.session_state.show_table = not st.session_state.show_table  # flip True/False
+
+
+if st.session_state.show_table:
     
-#     employees = sorted(df["Employee"].dropna().unique())
-#     selected_employee = st.multiselect("Filter by employee:", employees)
+    employees = sorted(df["Employee"].dropna().unique())
+    selected_employee = st.multiselect("Filter by employee:", employees)
 
-#     forms = sorted(df["Form"].dropna().unique())
-#     selected_form = st.multiselect("Filter by form:",forms)
+    forms = sorted(df["Form"].dropna().unique())
+    selected_form = st.multiselect("Filter by form:",forms)
 
-#     if selected_form and selected_employee:
-#         filtered_df = df[df["Form"].isin(selected_form)]
-#         filtered_df = filtered_df[filtered_df["Employee"].isin(selected_employee)]
-#     elif selected_form:
-#         filtered_df = df[df["Form"].isin(selected_form)]
-#     elif selected_employee:
-#         filtered_df = df[df["Employee"].isin(selected_employee)]
-#     else:
-#         filtered_df = df
+    if selected_form and selected_employee:
+        filtered_df = df[df["Form"].isin(selected_form)]
+        filtered_df = filtered_df[filtered_df["Employee"].isin(selected_employee)]
+    elif selected_form:
+        filtered_df = df[df["Form"].isin(selected_form)]
+    elif selected_employee:
+        filtered_df = df[df["Employee"].isin(selected_employee)]
+    else:
+        filtered_df = df
 
-#     table_html = filtered_df.to_html(escape=False, index=False)
-#     table_html = table_html.replace('style="text-align: right;"', '')  # optional cleanup
-#     table_html = table_html.replace('border="1" class="dataframe"', 'class="dataframe"')  # cleaner look
-#     table_html = table_html.replace('style="width: 100%;"', '')  # THIS removes the extra spacing problem
+    table_html = filtered_df.to_html(escape=False, index=False)
+    table_html = table_html.replace('style="text-align: right;"', '')  # optional cleanup
+    table_html = table_html.replace('border="1" class="dataframe"', 'class="dataframe"')  # cleaner look
+    table_html = table_html.replace('style="width: 100%;"', '')  # THIS removes the extra spacing problem
 
 
-#     display_df = filtered_df.copy()
-#     display_df["PDF"] = display_df["PDF"].apply(lambda x: f'<a href="{x}" target="_blank">PDF</a>')
+    display_df = filtered_df.copy()
+    display_df["PDF"] = display_df["PDF"].apply(lambda x: f'<a href="{x}" target="_blank">PDF</a>')
 
-#     st.markdown(
-#         f"""
-#         <div style="max-height:500px; overflow-y:auto;">
-#             {display_df.to_html(escape=False, index=False)}
-#         </div>
-#         """,
-#         unsafe_allow_html=True
-#     )
+    st.markdown(
+        f"""
+        <div style="max-height:500px; overflow-y:auto;">
+            {display_df.to_html(escape=False, index=False)}
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
-#     csv = filtered_df.to_csv(index=False).encode('utf-8')
+    csv = filtered_df.to_csv(index=False).encode('utf-8')
 
-#     st.download_button(
-#         label="Download CSV",
-#         data=csv,
-#         file_name="submissions.csv",
-#         mime="text/csv"
-#     )
+    st.download_button(
+        label="Download CSV",
+        data=csv,
+        file_name="submissions.csv",
+        mime="text/csv"
+    )
 
 
 
@@ -158,6 +159,7 @@ with st.form("my_form"):
      submitted = st.form_submit_button("Submit")
      if submitted:
         st.write("slider", slider_val, "checkbox", checkbox_val)
+
 
 
 

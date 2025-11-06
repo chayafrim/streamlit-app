@@ -132,24 +132,25 @@ with st.expander("Submissions"):
 
 
 
+with st.expander("Form"):
+    with st.form("my_form"):
+         st.write("Form Title")
+         st.text_input("Enter your name")
+         st.radio("Choose one:", ["Option 1", "Option 2", "Option 3"])
+         st.number_input("Enter a number between 1 and 10", -10, 10)
+         st.date_input("Select Date")
+         st.time_input("Select Time")
+         st.color_picker("Pick a color")
+         slider_val = st.slider("Form slider")
+         checkbox_val = st.checkbox("Form checkbox")
+         st.file_uploader("Upload file")
+         st.camera_input("Upload image")
+    
+    
+         submitted = st.form_submit_button("Submit")
+         if submitted:
+            st.write("slider", slider_val, "checkbox", checkbox_val)
 
-with st.form("my_form"):
-     st.write("Form Title")
-     st.text_input("Enter your name")
-     st.radio("Choose one:", ["Option 1", "Option 2", "Option 3"])
-     st.number_input("Enter a number between 1 and 10", -10, 10)
-     st.date_input("Select Date")
-     st.time_input("Select Time")
-     st.color_picker("Pick a color")
-     slider_val = st.slider("Form slider")
-     checkbox_val = st.checkbox("Form checkbox")
-     st.file_uploader("Upload file")
-     st.camera_input("Upload image")
-
-
-     submitted = st.form_submit_button("Submit")
-     if submitted:
-        st.write("slider", slider_val, "checkbox", checkbox_val)
 
 
 

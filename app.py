@@ -75,10 +75,10 @@ def get_data():
     # df = pd.read_sql("Select submission_date Date, job Job, employee Employee, form_name Form, link PDF from submissions", conn)
     df = pd.read_csv("submissions.csv")
     
-    df = df[df["Job"] == "4200 NW 19th Street"]
+    df = df[df["job"] == "4200 NW 19th Street"]
     # df = df.drop("Job", axis = 1)
-    df["Date"] = pd.to_datetime(df["Date"]).dt.date
-    df["Form"] = [x.replace("_", " ") for x in df["Form"]]
+    df["submission_date"] = pd.to_datetime(df["submission_date"]).dt.date
+    df["form_name"] = [x.replace("_", " ") for x in df["form_name"]]
     return df
 
 df = get_data()
@@ -96,19 +96,19 @@ if st.button("Toggle Table"):
 
 if st.session_state.show_table:
     
-    employees = sorted(df["Employee"].dropna().unique())
+    employees = sorted(df["employee"].dropna().unique())
     selected_employee = st.multiselect("Filter by employee:", employees)
 
-    forms = sorted(df["Form"].dropna().unique())
+    forms = sorted(df["form_name"].dropna().unique())
     selected_form = st.multiselect("Filter by form:",forms)
 
     if selected_form and selected_employee:
-        filtered_df = df[df["Form"].isin(selected_form)]
-        filtered_df = filtered_df[filtered_df["Employee"].isin(selected_employee)]
+        filtered_df = df[df["form_name"].isin(selected_form)]
+        filtered_df = filtered_df[filtered_df["employee"].isin(selected_employee)]
     elif selected_form:
-        filtered_df = df[df["Form"].isin(selected_form)]
+        filtered_df = df[df["form_name"].isin(selected_form)]
     elif selected_employee:
-        filtered_df = df[df["Employee"].isin(selected_employee)]
+        filtered_df = df[df["employee"].isin(selected_employee)]
     else:
         filtered_df = df
 
@@ -119,7 +119,7 @@ if st.session_state.show_table:
 
 
     display_df = filtered_df.copy()
-    display_df["PDF"] = display_df["PDF"].apply(lambda x: f'<a href="{x}" target="_blank">PDF</a>')
+    display_df["link"] = display_df["link"].apply(lambda x: f'<a href="{x}" target="_blank">PDF</a>')
 
     st.markdown(
         f"""
@@ -159,6 +159,7 @@ with st.form("my_form"):
      submitted = st.form_submit_button("Submit")
      if submitted:
         st.write("slider", slider_val, "checkbox", checkbox_val)
+
 
 
 

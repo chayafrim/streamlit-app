@@ -76,7 +76,7 @@ def get_data():
     df = pd.read_csv("submissions.csv")
     df = df[df["Job"] == "4200 NW 19th Street"]
     # df = df.drop("Job", axis = 1)
-    df["Date"] = pd.to_datetime(df["Date"]).dt.date
+    # df["Date"] = pd.to_datetime(df["Date"]).dt.date
     df["Form"] = [x.replace("_", " ") for x in df["Form"]]
     return df
 
@@ -158,5 +158,6 @@ with st.form("my_form"):
      submitted = st.form_submit_button("Submit")
      if submitted:
         st.write("slider", slider_val, "checkbox", checkbox_val)
+
 
 
